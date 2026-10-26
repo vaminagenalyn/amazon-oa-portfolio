@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Rivera | Amazon Online Arbitrage Product Researcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amazon-orange: #FF9900;
+            --amazon-dark: #131A22;
+            --amazon-blue: #232F3E;
+            --light-bg: #F7F8FA;
+            --text: #1a1a1a;
+            --text-light: #555;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+
+        /* ===== NAVBAR ===== */
+        nav {
+            background: var(--amazon-dark);
+            color: white;
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: padding 0.3s ease, background 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 12px 0;
+            background: rgba(19, 26, 34, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: var(--amazon-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s, transform 0.2s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--amazon-orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--amazon-orange);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--amazon-dark) 0%, var(--amazon-blue) 100%);
+            color: white;
+            padding: 100px 0 90px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,153,0,0.08) 0%, transparent 60%);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.15;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero h1 span {
+            color: var(--amazon-orange);
+            display: inline-block;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #cfd8e3;
+            max-width: 700px;
+            margin: 0 auto 36px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--amazon-orange);
+            color: var(--amazon-dark);
+        }
+
+        .btn-primary:hover {
+            background: #e88b00;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.35);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-3px);
+        }
+
+        /* ===== STATS ===== */
+        .stats {
+            background: var(--white);
+            padding: 40px 0;
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--amazon-orange);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 90px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, #232F3E, #131A22);
+            border-radius: var(--radius);
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 30px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .about-image .emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .about-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+        }
+
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .highlight:hover {
+            transform: translateX(5px);
+        }
+
+        .highlight::before {
+            content: "✓";
+            background: var(--amazon-orange);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .highlight:hover::before {
+            transform: scale(1.15);
+        }
+
+        /* ===== SERVICES ===== */
+        .services {
+            background: var(--light-bg);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 36px 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 18px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ===== CASE STUDIES ===== */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .case-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .case-header {
+            background: var(--amazon-blue);
+            color: white;
+            padding: 20px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-header h3 {
+            font-size: 1.15rem;
+        }
+
+        .roi {
+            background: var(--amazon-orange);
+            color: var(--amazon-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .case-card:hover .roi {
+            transform: scale(1.1);
+        }
+
+        .case-body {
+            padding: 28px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 1.3rem;
+            color: var(--amazon-orange);
+        }
+
+        .metric span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .case-body p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ===== TOOLS ===== */
+        .tools-section {
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .tools-track {
+            display: flex;
+            width: max-content;
+            animation: scrollTools 30s linear infinite;
+        }
+
+        .tools-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollTools {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .tools-group {
+            display: flex;
+            gap: 16px;
+            padding-right: 16px;
+        }
+
+        .tool {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+            cursor: default;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tool:hover {
+            background: var(--amazon-orange);
+            color: var(--amazon-dark);
+            border-color: var(--amazon-orange);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 153, 0, 0.3);
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            background: var(--light-bg);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .stars {
+            color: var(--amazon-orange);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .testimonial p {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .author {
+            font-weight: 700;
+        }
+
+        .author span {
+            display: block;
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* ===== CONTACT ===== */
+        .contact {
+            text-align: center;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, var(--amazon-dark), var(--amazon-blue));
+            color: white;
+            padding: 60px 40px;
+            border-radius: var(--radius);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .contact-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+
+        .contact-box h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .contact-box p {
+            color: #cfd8e3;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--amazon-dark);
+            color: #aaa;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--amazon-orange);
+            text-decoration: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.4rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-grid, .services-grid, .cases-grid, .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .metrics { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">Alex<span>Rivera</span></a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#cases">Case Studies</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Amazon Online Arbitrage<br><span>Product Researcher</span></h1>
+            <p>I find high-ROI products, analyze competition, and deliver ready-to-buy opportunities so you can scale your Amazon OA business faster.</p>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn btn-primary">Work With Me</a>
+                <a href="#cases" class="btn btn-secondary">See Results</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item animate-on-scroll">
+                    <span class="stat-number" data-target="1200">0</span>
+                    <span class="stat-label">Products Researched</span>
+                </div>
+                <div class="stat-item animate-on-scroll delay-1">
+                    <span class="stat-number" data-target="38">0</span>
+                    <span class="stat-label">Avg. ROI Delivered</span>
+                </div>
+                <div class="stat-item animate-on-scroll delay-2">
+                    <span class="stat-number" data-target="2.4">0</span>
+                    <span class="stat-label">Client Sales Generated ($M)</span>
+                </div>
+                <div class="stat-item animate-on-scroll delay-3">
+                    <span class="stat-number" data-target="47">0</span>
+                    <span class="stat-label">Happy Clients</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image animate-on-scroll">
+                    <div>
+                        <div class="emoji">📦</div>
+                        <strong>Product Research Specialist</strong><br>
+                        Online Arbitrage Expert
+                    </div>
+                </div>
+                <div class="about-content animate-on-scroll delay-1">
+                    <h3>Turning Retail Finds into Amazon Profits</h3>
+                    <p>I'm a full-time Amazon Online Arbitrage Product Researcher with over 4 years of experience helping sellers discover profitable, low-risk products from major retailers.</p>
+                    <p>My process combines advanced software, manual verification, Keepa analysis, and real sales velocity data so you only buy products that actually sell and make money.</p>
+                    
+                    <div class="highlights">
+                        <div class="highlight">Keepa & Jungle Scout Pro</div>
+                        <div class="highlight">Restriction Checks</div>
+                        <div class="highlight">IP & Hazmat Screening</div>
+                        <div class="highlight">ROI & Velocity Focused</div>
+                        <div class="highlight">Wholesale + OA Hybrid</div>
+                        <div class="highlight">Daily Deal Hunting</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title animate-on-scroll">
+                <h2>What I Offer</h2>
+                <p>Specialized product research services designed for serious Amazon OA sellers</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">🔍</div>
+                    <h3>Daily Product Leads</h3>
+                    <p>High-quality, pre-vetted product opportunities delivered daily or weekly with full analysis (ROI, sales rank, competition, restrictions).</p>
+                </div>
+                <div class="service-card animate-on-scroll delay-1">
+                    <div class="service-icon">📊</div>
+                    <h3>Deep Product Analysis</h3>
+                    <p>Complete breakdown including Keepa charts, Buy Box percentage, FBA fees, estimated monthly sales, and risk assessment.</p>
+                </div>
+                <div class="service-card animate-on-scroll delay-2">
+                    <div class="service-icon">⚡</div>
+                    <h3>Custom Research</h3>
+                    <p>Need products in a specific niche, price range, or ROI target? I research exactly what your store needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASE STUDIES -->
+    <section id="cases">
+        <div class="container">
+            <div class="section-title animate-on-scroll">
+                <h2>Real Results</h2>
+                <p>Recent product research wins for my clients</p>
+            </div>
+            <div class="cases-grid">
+                <div class="case-card animate-on-scroll">
+                    <div class="case-header">
+                        <h3>Home & Kitchen Bundle</h3>
+                        <div class="roi">+52% ROI</div>
+                    </div>
+                    <div class="case-body">
+                        <div class="metrics">
+                            <div class="metric">
+                                <strong>$18.40</strong>
+                                <span>Avg Profit</span>
+                            </div>
+                            <div class="metric">
+                                <strong>#4,200</strong>
+                                <span>BSR</span>
+                            </div>
+                            <div class="metric">
+                                <strong>87%</strong>
+                                <span>Buy Box</span>
+                            </div>
+                        </div>
+                        <p>Found a multi-pack opportunity from a major retailer with strong velocity and low competition. Client sold 140+ units in the first 45 days.</p>
+                    </div>
+                </div>
+
+                <div class="case-card animate-on-scroll delay-1">
+                    <div class="case-header">
+                        <h3>Sports & Outdoors</h3>
+                        <div class="roi">+41% ROI</div>
+                    </div>
+                    <div class="case-body">
+                        <div class="metrics">
+                            <div class="metric">
+                                <strong>$27.90</strong>
+                                <span>Avg Profit</span>
+                            </div>
+                            <div class="metric">
+                                <strong>#2,850</strong>
+                                <span>BSR</span>
+                            </div>
+                            <div class="metric">
+                                <strong>94%</strong>
+                                <span>Buy Box</span>
+                            </div>
+                        </div>
+                        <p>Seasonal product with excellent Keepa history. Client scaled to 6 suppliers and generated over $18k in profit in one quarter.</p>
+                    </div>
+                </div>
+
+                <div class="case-card animate-on-scroll delay-2">
+                    <div class="case-header">
+                        <h3>Beauty & Personal Care</h3>
+                        <div class="roi">+63% ROI</div>
+                    </div>
+                    <div class="case-body">
+                        <div class="metrics">
+                            <div class="metric">
+                                <strong>$14.20</strong>
+                                <span>Avg Profit</span>
+                            </div>
+                            <div class="metric">
+                                <strong>#8,100</strong>
+                                <span>BSR</span>
+                            </div>
+                            <div class="metric">
+                                <strong>79%</strong>
+                                <span>Buy Box</span>
+                            </div>
+                        </div>
+                        <p>Clearance find with strong brand recognition. Extremely low competition at the time of sourcing. Fast turns and repeat orders.</p>
+                    </div>
+                </div>
+
+                <div class="case-card animate-on-scroll delay-3">
+                    <div class="case-header">
+                        <h3>Toys & Games</h3>
+                        <div class="roi">+37% ROI</div>
+                    </div>
+                    <div class="case-body">
+                        <div class="metrics">
+                            <div class="metric">
+                                <strong>$22.50</strong>
+                                <span>Avg Profit</span>
+                            </div>
+                            <div class="metric">
+                                <strong>#1,950</strong>
+                                <span>BSR</span>
+                            </div>
+                            <div class="metric">
+                                <strong>91%</strong>
+                                <span>Buy Box</span>
+                            </div>
+                        </div>
+                        <p>Pre-holiday research. Client stocked early and dominated the Buy Box during peak season, resulting in 300+ units sold.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOLS -->
+    <section id="tools">
+        <div class="container">
+            <div class="section-title animate-on-scroll">
+                <h2>Tools I Use Daily</h2>
+                <p>Professional-grade software for accurate and fast research</p>
+            </div>
+        </div>
+        <div class="tools-section">
+            <div class="tools-track">
+                <div class="tools-group">
+                    <div class="tool">Keepa</div>
+                    <div class="tool">Jungle Scout</div>
+                    <div class="tool">Helium 10</div>
+                    <div class="tool">SellerAmp</div>
+                    <div class="tool">Tactical Arbitrage</div>
+                    <div class="tool">BuyBotPro</div>
+                    <div class="tool">ASIN Matcher</div>
+                    <div class="tool">Amazon Seller Central</div>
+                    <div class="tool">Google Sheets + Scripts</div>
+                </div>
+                <!-- Duplicate for seamless infinite scroll -->
+                <div class="tools-group">
+                    <div class="tool">Keepa</div>
+                    <div class="tool">Jungle Scout</div>
+                    <div class="tool">Helium 10</div>
+                    <div class="tool">SellerAmp</div>
+                    <div class="tool">Tactical Arbitrage</div>
+                    <div class="tool">BuyBotPro</div>
+                    <div class="tool">ASIN Matcher</div>
+                    <div class="tool">Amazon Seller Central</div>
+                    <div class="tool">Google Sheets + Scripts</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title animate-on-scroll">
+                <h2>What Clients Say</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial animate-on-scroll">
+                    <div class="stars">★★★★★</div>
+                    <p>"Alex consistently finds products I would have never spotted. My ROI improved dramatically after switching to his research."</p>
+                    <div class="author">Marcus T. <span>Amazon Seller • 3 years</span></div>
+                </div>
+                <div class="testimonial animate-on-scroll delay-1">
+                    <div class="stars">★★★★★</div>
+                    <p>"The level of detail in every lead is insane — Keepa analysis, restriction notes, everything. Saved me hundreds of hours."</p>
+                    <div class="author">Priya S. <span>OA Seller • Full-time</span></div>
+                </div>
+                <div class="testimonial animate-on-scroll delay-2">
+                    <div class="stars">★★★★★</div>
+                    <p>"Best product researcher I've worked with. Clear communication and only sends products that actually make sense."</p>
+                    <div class="author">Daniel R. <span>Multi-channel Seller</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-box animate-on-scroll">
+                <h2>Ready to Scale Your OA Business?</h2>
+                <p>Whether you need daily leads, custom research, or a long-term product research partner — let's talk.</p>
+                <a href="mailto:alex@yourdomain.com" class="btn btn-primary">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Alex Rivera — Amazon Online Arbitrage Product Researcher. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Trigger counter animation if it's a stat number
+                    const counter = entry.target.querySelector('.stat-number');
+                    if (counter && !counter.classList.contains('counted')) {
+                        animateCounter(counter);
+                        counter.classList.add('counted');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        function animateCounter(element) {
+            const target = parseFloat(element.getAttribute('data-target'));
+            const isDecimal = target % 1 !== 0;
+            const duration = 2000;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease out cubic
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                let current = target * easeProgress;
+                
+                if (isDecimal) {
+                    element.textContent = current.toFixed(1);
+                } else if (target >= 1000) {
+                    element.textContent = Math.floor(current).toLocaleString() + '+';
+                } else {
+                    element.textContent = Math.floor(current) + (target === 38 ? '%' : '');
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    // Final value
+                    if (isDecimal) {
+                        element.textContent = target.toFixed(1);
+                    } else if (target >= 1000) {
+                        element.textContent = target.toLocaleString() + '+';
+                    } else if (target === 38) {
+                        element.textContent = target + '%';
+                    } else {
+                        element.textContent = target;
+                    }
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+    </script>
+
+</body>
+</html>
